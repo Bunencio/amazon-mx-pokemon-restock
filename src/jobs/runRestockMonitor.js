@@ -135,6 +135,7 @@ async function main() {
     watchlist,
     cursor: shared.tasks.roundRobinCursor || 0,
     parity: shared.tasks.filteredQueryParity || 0,
+    p1Cursor: shared.tasks.p1Cursor || 0,
     config,
     onlyAsin: config.debug.onlyAsin || null,
     merchantId: config.amazon.merchantId,
@@ -297,6 +298,7 @@ async function main() {
   // ── Persist ──
   shared.tasks.roundRobinCursor = plan.cursor;
   shared.tasks.filteredQueryParity = plan.parity;
+  shared.tasks.p1Cursor = plan.p1Cursor;
   me.lastFinishedAt = nowIso();
   me.lastOutcome = ctx.outcome;
   shared.history = cap(

@@ -12,13 +12,13 @@ import { shuffle } from '../utils/random.js';
  *
  * Pure: returns the steps plus the next cursor/parity to persist.
  */
-export function buildPlan({ items, tasks = {}, now = new Date(), budget = 8, watchlist, cursor = 0, parity = 0, config, onlyAsin = null, merchantId }) {
+export function buildPlan({ items, tasks = {}, now = new Date(), budget = 8, watchlist, cursor = 0, parity = 0, p1Cursor = 0, config, onlyAsin = null, merchantId }) {
   const steps = [];
   const cost = () => steps.length;
 
   if (onlyAsin) {
     steps.push(dpStep(onlyAsin, merchantId, 1));
-    return { steps, cursor, parity, reserve: Math.max(0, budget - 1), periodic: null, budget };
+    return { steps, cursor, parity, p1Cursor, reserve: Math.max(0, budget - 1), periodic: null, budget };
   }
 
   const active = items.filter((i) => i.active !== false);
@@ -34,10 +34,19 @@ export function buildPlan({ items, tasks = {}, now = new Date(), budget = 8, wat
     nextParity = (parity + 1) % filteredQueries.length;
   }
 
-  // 2) Priority-1 ASINs every run.
-  for (const it of active.filter((i) => i.priority === 1).sort(byAsin)) {
-    if (cost() >= usable) break;
-    steps.push(dpStep(it.asin, merchantId, 1));
+  // 2) Priority-1 ASINs every run. When the budget cannot hold all of them
+  //    (e.g. after a block halved it), rotate the window so none is starved.
+  const p1 = active.filter((i) => i.priority === 1).sort(byAsin);
+  let nextP1Cursor = 0;
+  if (p1.length) {
+    const slots = Math.max(0, usable - cost());
+    if (p1.length <= slots) {
+      for (const it of p1) steps.push(dpStep(it.asin, merchantId, 1));
+    } else {
+      const start = ((p1Cursor % p1.length) + p1.length) % p1.length;
+      for (let k = 0; k < slots; k += 1) steps.push(dpStep(p1[(start + k) % p1.length].asin, merchantId, 1));
+      nextP1Cursor = (start + slots) % p1.length;
+    }
   }
 
   // 3) One periodic task per run (discovery is cheaper, so it goes first).
@@ -83,7 +92,7 @@ export function buildPlan({ items, tasks = {}, now = new Date(), budget = 8, wat
   // Randomize request order; store pages stay last and in configured order.
   const storeSteps = steps.filter((s) => s.type === 'store');
   const others = shuffle(steps.filter((s) => s.type !== 'store'));
-  return { steps: [...others, ...storeSteps], cursor: nextCursor, parity: nextParity, reserve, periodic, budget };
+  return { steps: [...others, ...storeSteps], cursor: nextCursor, parity: nextParity, p1Cursor: nextP1Cursor, reserve, periodic, budget };
 }
 
 export function dpStep(asin, merchantId, priority = 2) {

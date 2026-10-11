@@ -78,6 +78,23 @@ test('store sweep respects its hour window and the enabled flag', () => {
   assert.equal(p2.periodic, null);
 });
 
+test('when the budget cannot hold every priority-1 item, the P1 window rotates', () => {
+  const manyP1 = ['B0P1000001', 'B0P1000002', 'B0P1000003', 'B0P1000004', 'B0P1000005', 'B0P1000006'].map((asin) => ({ asin, priority: 1, active: true }));
+  // budget 5 → reserve 1 → usable 4 → 1 search + 3 P1 slots
+  const r1 = buildPlan({ ...base, items: manyP1, tasks: fresh(now), budget: 5, p1Cursor: 0 });
+  const d1 = r1.steps.filter((s) => s.type === 'dp').map((s) => s.asin).sort();
+  assert.deepEqual(d1, ['B0P1000001', 'B0P1000002', 'B0P1000003']);
+  assert.equal(r1.p1Cursor, 3);
+  const r2 = buildPlan({ ...base, items: manyP1, tasks: fresh(now), budget: 5, p1Cursor: r1.p1Cursor });
+  const d2 = r2.steps.filter((s) => s.type === 'dp').map((s) => s.asin).sort();
+  assert.deepEqual(d2, ['B0P1000004', 'B0P1000005', 'B0P1000006']);
+  assert.equal(r2.p1Cursor, 0, 'wraps around');
+  // with enough budget everything fits and the cursor resets
+  const r3 = buildPlan({ ...base, items: manyP1, tasks: fresh(now), budget: 10, p1Cursor: 4 });
+  assert.equal(r3.steps.filter((s) => s.type === 'dp').length, 6);
+  assert.equal(r3.p1Cursor, 0);
+});
+
 test('ONLY_ASIN produces a single dp step', () => {
   const plan = buildPlan({ ...base, tasks: fresh(now), budget: 8, onlyAsin: 'B0H8SV3WJ8' });
   assert.equal(plan.steps.length, 1);
