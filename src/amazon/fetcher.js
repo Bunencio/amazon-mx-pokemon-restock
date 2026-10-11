@@ -30,19 +30,29 @@ export function createFetcher({ config, logger, session = null }) {
   let browser = null;
   let browserFailed = false;
   let requestCount = 0;
+  let warmupBlock = null; // set when the home page itself comes back as a challenge
 
   async function getBrowser() {
     if (browser || browserFailed) return browser;
+    const storageState = session?.playwrightStorageState || null;
     try {
       browser = await createBrowserSession({
         userAgent: mode === 'playwright' ? null : userAgent,
         timeoutMs: config.scrape.renderTimeoutMs,
-        storageState: session?.playwrightStorageState || null,
+        storageState,
         logger,
       });
     } catch (err) {
       browserFailed = true;
       logger?.warn('No se pudo iniciar Playwright.', { error: err.message });
+      return null;
+    }
+    if (!storageState) {
+      // Fresh session: open the home page first, then browse products.
+      const home = await browser.warmUp(`${config.amazon.baseUrl}/`);
+      const validation = validatePage({ type: 'home', ...home });
+      logger?.info('Warm-up de sesión nueva en la portada.', { kind: validation.kind, bytes: validation.bytes, ms: home.elapsedMs });
+      if (validation.severity === 'hard') warmupBlock = home;
     }
     return browser;
   }
@@ -56,6 +66,9 @@ export function createFetcher({ config, logger, session = null }) {
   async function fetchRendered(step) {
     const b = await getBrowser();
     if (!b) return { status: 0, html: '', finalUrl: step.url, method: 'playwright', elapsedMs: 0, bytes: 0, error: 'playwright no disponible' };
+    // The home page already answered with a CAPTCHA: surface it as this step's
+    // result so the run classifies it as a hard block and stops immediately.
+    if (warmupBlock) return { ...warmupBlock, finalUrl: step.url, method: 'playwright' };
     requestCount += 1;
     return b.fetchRendered(step.url, { scrolls: step.scrolls || 0 });
   }

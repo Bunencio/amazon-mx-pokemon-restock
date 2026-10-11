@@ -65,9 +65,12 @@ watchlist.json                  ASINs semilla, consultas, regex de títulos, pá
 de descubrimiento; una vez al día (solo PC), barrido de la tienda de marca con Playwright.
 Entre peticiones hay una pausa aleatoria de 2–5 s.
 
-**Bloqueos**: 2 páginas degradadas en una corrida → se aborta, aviso en Discord (1/día/runner),
-backoff 10 → 20 → 40 → 80 → 160 min, presupuesto a la mitad (se recupera +1 por día limpio).
-Un bloqueo duro (captcha/503) además renueva la sesión del navegador.
+**Bloqueos**: un captcha/503 (bloqueo duro) o 2 páginas degradadas en una corrida → se aborta,
+aviso en Discord (1/día/runner), backoff 10 → 20 → 40 → 80 → 160 min, presupuesto a la mitad
+(se recupera +1 por día limpio). Un bloqueo duro además renueva la sesión del navegador; una
+sesión nueva siempre abre primero la portada de amazon.com.mx (como una persona) antes de
+visitar productos. Es normal ver algún captcha el primer día tras muchas pruebas manuales desde
+la misma IP; la reputación se recupera sola con el ritmo normal del monitor.
 
 ## Instalación en el PC
 

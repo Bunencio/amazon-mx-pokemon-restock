@@ -65,6 +65,29 @@ export async function createBrowserSession({ userAgent = null, timeoutMs = 45_00
     }
   }
 
+  /**
+   * Visit the home page once, like a person opening Amazon before browsing.
+   * Only used for brand-new sessions (no storageState): deep-linking straight
+   * into product pages with an empty cookie jar is a classic bot pattern.
+   */
+  async function warmUp(homeUrl = 'https://www.amazon.com.mx/') {
+    const page = await context.newPage();
+    page.setDefaultTimeout(timeoutMs);
+    const started = Date.now();
+    try {
+      const response = await page.goto(homeUrl, { waitUntil: 'domcontentloaded', timeout: timeoutMs });
+      await page.waitForSelector('#nav-logo, #nav-main, #captchacharacters', { timeout: 10_000 }).catch(() => {});
+      await page.waitForTimeout(1_200 + Math.floor(Math.random() * 1_300));
+      const html = await page.content();
+      return { status: response?.status() ?? 0, html, finalUrl: page.url(), method: 'playwright', elapsedMs: Date.now() - started, bytes: Buffer.byteLength(html) };
+    } catch (err) {
+      logger?.warn('Warm-up de la portada falló.', { error: err.message });
+      return { status: 0, html: '', finalUrl: homeUrl, method: 'playwright', elapsedMs: Date.now() - started, bytes: 0, error: err.message };
+    } finally {
+      await page.close().catch(() => {});
+    }
+  }
+
   async function exportStorageState() {
     return context.storageState();
   }
@@ -76,6 +99,7 @@ export async function createBrowserSession({ userAgent = null, timeoutMs = 45_00
 
   return {
     fetchRendered,
+    warmUp,
     exportStorageState,
     close,
     userAgent: ua,
