@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-11T00:31:06.553Z",
+  "type": "dp",
+  "asin": "B0H7818YHY",
+  "query": null,
+  "pageId": null,
+  "url": "https://www.amazon.com.mx/dp/B0H7818YHY?smid=AVDBXBAVVSXLQ&th=1&psc=1",
+  "method": "playwright",
+  "status": 200,
+  "kind": "ok",
+  "bytes": 1347702,
+  "classification": {
+    "status": "out_of_stock",
+    "confidence": "medium"
+  },
+  "merchantId": null,
+  "availabilityText": null
+}

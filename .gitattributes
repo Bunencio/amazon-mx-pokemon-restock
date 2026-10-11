@@ -1,0 +1,15 @@
+# LF en el repo para que el runner Linux y los pasos YAML/shell nunca vean CRLF.
+* text=auto eol=lf
+
+*.json text eol=lf
+*.yml  text eol=lf
+*.js   text eol=lf
+*.md   text eol=lf
+
+# Scripts de Windows: CRLF explícito (cmd.exe se comporta mejor con CRLF).
+*.cmd text eol=crlf
+*.vbs text eol=crlf
+*.ps1 text eol=crlf
+
+# Fixtures comprimidos.
+*.gz binary

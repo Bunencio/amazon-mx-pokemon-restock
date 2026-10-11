@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-11T00:15:44.694Z",
+  "type": "dp",
+  "asin": "B0GR6N18F6",
+  "query": null,
+  "pageId": null,
+  "url": "https://www.amazon.com.mx/dp/B0GR6N18F6?smid=AVDBXBAVVSXLQ&th=1&psc=1",
+  "method": "playwright",
+  "status": 200,
+  "kind": "ok",
+  "bytes": 2023796,
+  "classification": {
+    "status": "amazon_in_stock",
+    "confidence": "high"
+  },
+  "merchantId": "AVDBXBAVVSXLQ",
+  "availabilityText": "Disponible"
+}

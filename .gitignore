@@ -1,0 +1,26 @@
+# Secretos / entorno
+.env
+.env.*
+!.env.example
+
+# Dependencias
+node_modules
+
+# Logs, estado y depuración (nunca se commitean)
+logs
+*.log
+state
+debug
+# Copias derivadas de test/fixtures (regenerar con `npm run mock:init`)
+test/mock
+screenshots
+test-results
+tmp
+.cache
+
+# SO / editor
+.DS_Store
+Thumbs.db
+.idea
+.vscode/*
+!.vscode/extensions.json

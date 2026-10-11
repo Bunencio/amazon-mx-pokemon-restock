@@ -1,0 +1,18 @@
+{
+  "capturedAt": "2026-10-11T00:15:35.582Z",
+  "type": "dp",
+  "asin": "B0H8SV3WJ8",
+  "query": null,
+  "pageId": null,
+  "url": "https://www.amazon.com.mx/dp/B0H8SV3WJ8?smid=AVDBXBAVVSXLQ&th=1&psc=1",
+  "method": "playwright",
+  "status": 200,
+  "kind": "ok",
+  "bytes": 1783777,
+  "classification": {
+    "status": "third_party_only",
+    "confidence": "high"
+  },
+  "merchantId": "A3IWELYEROHRHA",
+  "availabilityText": "Sólo queda(n) 8 en stock."
+}

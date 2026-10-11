@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-10-11T00:16:00.290Z",
+  "type": "search",
+  "asin": null,
+  "query": "pokemon tcg 30th celebration",
+  "pageId": null,
+  "url": "https://www.amazon.com.mx/s?k=pokemon+tcg+30th+celebration",
+  "method": "playwright",
+  "status": 200,
+  "kind": "ok",
+  "bytes": 1439060,
+  "classification": null,
+  "merchantId": null,
+  "availabilityText": null
+}

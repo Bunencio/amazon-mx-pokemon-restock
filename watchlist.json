@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "merchantId": "AVDBXBAVVSXLQ",
+  "titleFilter": {
+    "mustMatch": ["pok.?mon"],
+    "anyOf": ["30th", "celebration", "celebraci[oó]n\\s*(del\\s*)?30", "30\\s*aniversario", "aniversario\\s*30", "30\\.?[oº°]\\s*aniversario"],
+    "tcgSignals": [
+      "\\btcg\\b", "\\bjcc\\b", "juego de cartas", "trading card", "cartas coleccionables",
+      "booster", "refuerzo", "\\bsobres?\\b", "bl[ií]ster", "bundle", "lote",
+      "elite trainer", "entrenador", "\\blatas?\\b", "\\btins?\\b",
+      "colecci[oó]n", "collection", "\\bdeck\\b", "baraja", "ultra.?premium",
+      "p[óo]ster", "cartel", "sticker", "knock out", "binder", "carpeta", "\\bex\\b"
+    ],
+    "exclude": [
+      "funko", "lego", "peluche", "plush", "figura", "figure", "playera", "t-shirt", "camiseta",
+      "taza", "mug", "llavero", "keychain", "mochila", "backpack", "nintendo switch", "amiibo",
+      "rompecabezas", "puzzle", "disfraz", "cosplay"
+    ]
+  },
+  "queries": {
+    "filtered": ["pokemon tcg 30th celebration", "pokemon 30 aniversario cartas"],
+    "discovery": ["pokemon 30th celebration", "pokemon tcg celebración 30 aniversario"]
+  },
+  "store": {
+    "mainPageId": "3EAD7EF0-A888-4987-AE79-E89B389F5947",
+    "subPageIds": [
+      "9F1A7F2D-4268-4207-ABBE-44D6B85FDAD6",
+      "9353D4D1-9242-4223-9E41-758E022CB7FF",
+      "0CD6D243-6FFD-48DD-9B09-92D3C0BCA5F1",
+      "4B74AF50-F172-49B9-B022-1C439A32EE9A"
+    ]
+  },
+  "items": [
+    { "asin": "B0H8SV3WJ8", "label": "30th Celebration Elite Trainer Box", "priority": 1 },
+    { "asin": "B0H78BB9TY", "label": "30th Celebration Elite Trainer Box (listado B)", "priority": 1 },
+    { "asin": "B0H783FY5Z", "label": "30th Celebration Booster Bundle", "priority": 1 },
+    { "asin": "B0H77VYKSM", "label": "30th Celebration Ultra-Premium Collection — Day", "priority": 1 },
+    { "asin": "B0H7818YHY", "label": "30th Celebration Binder Collection (Amazon México lo lista)", "priority": 1 },
+    { "asin": "B0HM3C59CV", "label": "30th Celebration Booster Pack", "priority": 1 },
+
+    { "asin": "B0H8T1JGDG", "label": "30th Celebration Poster Collection (ES)", "priority": 2 },
+    { "asin": "B0H77W4411", "label": "30th Celebration Poster Collection", "priority": 2 },
+    { "asin": "B0H784PD4X", "label": "30th Celebration Ultra-Premium Collection (Day/Night aleatorio)", "priority": 2 },
+    { "asin": "B0HGNHT76M", "label": "30th Celebration Greninja ex Box", "priority": 2 },
+    { "asin": "B0H78194FC", "label": "30th Celebration Greninja ex Box (listado B)", "priority": 2 },
+    { "asin": "B0H7817G9M", "label": "30th Celebration Sylveon ex Box", "priority": 2 },
+    { "asin": "B0H7818RCM", "label": "30th Celebration ex Box (Sylveon/Greninja aleatorio)", "priority": 2 },
+    { "asin": "B0H7FDBNSB", "label": "30th Celebration Knock Out Collection", "priority": 2 },
+    { "asin": "B0H77VZBX4", "label": "30th Celebration Tech Sticker Collection (aleatorio)", "priority": 2 },
+    { "asin": "B0H784MH1P", "label": "30th Celebration Tech Sticker Collection — Alolan Exeggutor", "priority": 2 },
+    { "asin": "B0H77XPPH2", "label": "30th Celebration Tech Sticker Collection — Lucario", "priority": 2 },
+    { "asin": "B0H77XR9JJ", "label": "Carpeta para Colecciones 30.º Aniversario (ES)", "priority": 2 },
+    { "asin": "B0H77W342Y", "label": "Paquete de Sobres de Refuerzo 30.º Aniversario (ES)", "priority": 2 },
+    { "asin": "B0H7818GCQ", "label": "Caja de Entrenador Élite 30.º Aniversario (ES)", "priority": 2 },
+    { "asin": "B0H77W4NZH", "label": "Colección con Calcomanías para Dispositivos 30.º Aniversario (ES)", "priority": 2 },
+    { "asin": "B0H78184DH", "label": "30th Celebration Mini Tin — Espeon (Day)", "priority": 2 },
+    { "asin": "B0H788QPS9", "label": "30th Celebration Mini Tin — Pikachu (Day)", "priority": 2 },
+    { "asin": "B0H783JJ66", "label": "30th Celebration Mini Tin — Lapras (Day)", "priority": 2 },
+    { "asin": "B0H784NT41", "label": "30th Celebration Mini Tin — Moltres (Day)", "priority": 2 },
+    { "asin": "B0H77XNCGM", "label": "30th Celebration Mini Tin — Mew (Day)", "priority": 2 },
+    { "asin": "B0H786LQ7Z", "label": "30th Celebration Mini Tin — Pikachu (Night)", "priority": 2 },
+    { "asin": "B0H784MT1P", "label": "30th Celebration Mini Tin — Zapdos (Night)", "priority": 2 },
+    { "asin": "B0H78194FL", "label": "30th Celebration Mini Tin — Mewtwo (Night)", "priority": 2 },
+    { "asin": "B0H77X9VF7", "label": "30th Celebration Mini Tin — Umbreon (Night)", "priority": 2 },
+    { "asin": "B0H77W3H3C", "label": "30th Celebration Mini Tin — Greninja (Night)", "priority": 2 }
+  ],
+  "ignoreAsins": [],
+  "defaults": { "discoveredPriority": 2, "maxDiscoveredItems": 60 }
+}

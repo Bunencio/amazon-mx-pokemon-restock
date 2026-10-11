@@ -1,0 +1,26 @@
+{
+  "name": "amazon-mx-pokemon-restock",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Monitor de restock en Amazon México (vendedor oficial AVDBXBAVVSXLQ) para la línea Pokémon TCG 30th Celebration. Alertas por Discord. Corre en el PC (Task Scheduler) con GitHub Actions como respaldo.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "monitor": "node src/jobs/runRestockMonitor.js",
+    "check": "node scripts/check.js",
+    "doctor": "node scripts/doctor.js",
+    "test:alert": "node scripts/test-alert.js",
+    "gist:init": "node scripts/gist-init.js",
+    "mock:init": "node scripts/mock-init.js",
+    "test": "node --test \"test/**/*.test.js\""
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.5",
+    "playwright": "1.60.0",
+    "zod": "^3.23.8"
+  }
+}

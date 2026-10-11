@@ -1,0 +1,25 @@
+name: Keepalive
+
+# GitHub desactiva los workflows programados de un repo público tras 60 días sin
+# actividad. Un commit vacío mensual mantiene vivo el cron del monitor de respaldo.
+on:
+  schedule:
+    - cron: "0 12 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Commit de actividad
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          date -u +"%Y-%m-%dT%H:%M:%SZ" > .keepalive
+          git add .keepalive
+          git commit -m "chore: keepalive $(date -u +%F)" || exit 0
+          git push

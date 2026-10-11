@@ -1,0 +1,103 @@
+name: Pokémon Restock Monitor (respaldo)
+
+# Runner de RESPALDO en GitHub Actions. Corre cada 15 min desfasado del PC
+# (:07 :22 :37 :52) y, salvo `force`, se retira si el PC reportó actividad en los
+# últimos PC_FRESH_MINUTES. Si el PC lleva > WATCHDOG_STALE_MINUTES callado, avisa
+# en Discord y toma el relevo (Amazon puede bloquear IPs de datacenter; el monitor
+# lo detecta, avisa una vez al día y hace backoff — nunca intenta evadir).
+#
+# El cron de GitHub puede retrasarse varios minutos y se desactiva solo tras 60
+# días sin actividad en el repo (ver keepalive.yml).
+on:
+  schedule:
+    - cron: "7-59/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Ignorar el latido del PC y correr de todos modos"
+        type: boolean
+        default: false
+      asin:
+        description: "Revisar solo este ASIN (opcional)"
+        type: string
+        default: ""
+
+concurrency:
+  group: pokemon-restock
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read   # leer el artifact de estado (solo cuando no hay gist)
+
+env:
+  ARTIFACT_NAME: pokemon-restock-shared-state
+
+jobs:
+  monitor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Dependencias
+        run: npm ci --no-audit --no-fund
+
+      - name: Cache de navegadores Playwright
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+
+      - name: Instalar Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Monitor
+        env:
+          RUNNER_ID: actions
+          FETCH_MODE: playwright
+          MAX_REQUESTS_PER_RUN: "5"
+          STORE_SWEEP_ENABLED: "false"
+          DEFER_TO_PC: ${{ inputs.force == true && 'false' || 'true' }}
+          FORCE_RUN: ${{ inputs.force == true && 'true' || 'false' }}
+          ONLY_ASIN: ${{ inputs.asin }}
+          SEND_DISCORD: "true"
+          SAVE_DEBUG_HTML: "true"
+          STATE_FILE: state/shared.json
+          ARTIFACT_NAME: ${{ env.ARTIFACT_NAME }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GIST_ID: ${{ secrets.GIST_ID }}
+          GIST_TOKEN: ${{ secrets.GIST_TOKEN }}
+          DISCORD_BOT_TOKEN: ${{ secrets.DISCORD_BOT_TOKEN }}
+          DISCORD_CHANNEL_ID: ${{ secrets.DISCORD_CHANNEL_ID }}
+          DISCORD_MENTION_ROLE_ID: ${{ secrets.DISCORD_MENTION_ROLE_ID }}
+          LOG_LEVEL: info
+        run: npm run monitor
+
+      - name: Subir estado compartido (respaldo cuando no hay gist)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.ARTIFACT_NAME }}
+          path: state/shared.json
+          retention-days: 7
+          overwrite: true
+          if-no-files-found: ignore
+
+      - name: Subir HTML de depuración (páginas degradadas/ambiguas)
+        if: always()
+        continue-on-error: true
+        uses: actions/upload-artifact@v4
+        with:
+          name: pokemon-restock-debug-${{ github.run_id }}-${{ github.run_attempt }}
+          path: debug/
+          retention-days: 3
+          if-no-files-found: ignore

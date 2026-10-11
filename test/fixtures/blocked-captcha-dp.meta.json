@@ -1,0 +1,15 @@
+{
+  "capturedAt": "2026-10-11T00:03:49.095Z",
+  "type": "dp",
+  "asin": "B0H8SV3WJ8",
+  "query": null,
+  "pageId": null,
+  "url": "https://www.amazon.com.mx/dp/B0H8SV3WJ8?smid=AVDBXBAVVSXLQ&th=1&psc=1",
+  "method": "static",
+  "status": 200,
+  "kind": "captcha",
+  "bytes": 4142,
+  "classification": null,
+  "merchantId": null,
+  "availabilityText": null
+}
