@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Registra (o reemplaza) la tarea programada de Windows que corre el monitor cada N minutos.
 
@@ -34,7 +34,7 @@ $settings = New-ScheduledTaskSettingsSet `
   -RunOnlyIfNetworkAvailable
 
 Register-ScheduledTask -TaskName $TaskName -Action $action -Trigger $trigger -Settings $settings `
-  -Description "Pokémon Restock Monitor (Amazon México) — una pasada cada $IntervalMinutes min desde $root" -Force | Out-Null
+  -Description "Pokémon Restock Monitor (Amazon México) - una pasada cada $IntervalMinutes min desde $root" -Force | Out-Null
 
 $task = Get-ScheduledTask -TaskName $TaskName
 Write-Host "Tarea '$TaskName' registrada. Estado: $($task.State). Primera ejecución: $start. Intervalo: $IntervalMinutes min."

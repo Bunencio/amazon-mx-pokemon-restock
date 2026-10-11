@@ -1,4 +1,4 @@
-<#
+﻿<#
 .SYNOPSIS
   Elimina la tarea programada del monitor.
 .EXAMPLE
